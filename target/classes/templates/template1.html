@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"type="text/css"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.1.3/js/bootstrap.bundle.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body >
+<nav  class="navbar navbar-inverse" >
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand"   href="#">WebSiteName</a>
+        </div>
+        <ul  class="nav navbar-nav">
+            <li  th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}" ><a th:href="@{/}">Home</a></li>
+            <li   sec:authorize="hasRole('ADMIN')" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/AddPatient' ? 'active':''}" >
+                <a th:href="@{/admin/AddPatient}">Ajouter Patient</a></li>
+            <li th:classappend="${#httpServletRequest.getRequestURI() == '/user/Liste' ? 'active':''}"><a th:href="@{/user/Liste}">Liste des patients</a></li>
+        </ul>
+
+        <ul  class="nav navbar-nav navbar-right">
+            <li sec:authorize="isAuthenticated()"><a href="#"><span sec:authentication="name"  ></span></a></li>
+            <li sec:authorize="isAuthenticated()"><a HREF="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            <li sec:authorize="!isAuthenticated()"><a HREF="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+        <ul>
+
+        </ul>
+    </div>
+</nav>
+<section layout:fragment="content1">
+
+</section>
+
+</body>
+</html>
