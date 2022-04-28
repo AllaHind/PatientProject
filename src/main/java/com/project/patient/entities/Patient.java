@@ -30,4 +30,5 @@ private boolean malade;
 private  int score;
 
 
+
 }

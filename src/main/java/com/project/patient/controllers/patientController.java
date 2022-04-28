@@ -64,7 +64,7 @@ public String delete(Long id,Model m,String keyword,int page){
      return "Home";
  }
  @GetMapping("/admin/edit")
-    public String edit(Model model,Long id,int page,String keyword)
+    public String edit(Model model,long id,int page,String keyword)
  {
     Patient p= patientRepository.findById(id).orElse(null);
     if(p==null) throw new RuntimeException("Patient introuvable");

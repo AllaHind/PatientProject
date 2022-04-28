@@ -1,5 +1,6 @@
 package com.project.patient.sec;
 
+import com.project.patient.sec.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,8 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 @Autowired
     private DataSource dataSource;
+@Autowired
+private UserDetailsServiceImpl userDetailsService;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 PasswordEncoder passwordEncoder=passwordEncoder();
@@ -28,10 +31,13 @@ auth.inMemoryAuthentication().withUser("user2").password(passwordEncoder.encode(
         auth.inMemoryAuthentication().withUser("admin").password(passwordEncoder.encode("1234")).roles("USER","ADMIN");
         */
 
-        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery("select username as principal ,password as credentials,active from user where username=?")
+      /*  auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery("select username as principal ,password as credentials,active from user where username=?")
                 .authoritiesByUsernameQuery("select username as principal,role as role from users_roles where username=? ")
                 .rolePrefix("ROLE_")
                 .passwordEncoder(passwordEncoder);
+
+       */
+        auth.userDetailsService(userDetailsService);
     }
 
 
@@ -41,8 +47,10 @@ auth.inMemoryAuthentication().withUser("user2").password(passwordEncoder.encode(
 
         http.formLogin();
         http.authorizeRequests().antMatchers("/").permitAll();
-        http.authorizeRequests().antMatchers(":admin/**").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers("/user/**").hasRole("USER");
+        http.authorizeRequests().antMatchers("/admin/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers("/user/**").hasAuthority("USER");
+        http.authorizeRequests().antMatchers("/webjars/**").permitAll();
+        http.authorizeRequests().antMatchers("/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.exceptionHandling().accessDeniedPage("/403");
 
